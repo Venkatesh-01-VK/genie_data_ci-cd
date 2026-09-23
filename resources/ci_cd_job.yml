@@ -1,0 +1,52 @@
+# Job resource for the CI/CD pipeline
+# This job runs the ci_cd_pipeline notebook
+targets:
+  dev:
+    resources:
+      jobs:
+        ci_cd_pipeline_job:
+          name: genie_ci_cd_pipeline_dev
+          description: "CI/CD pipeline job for data integration (dev environment)"
+          tasks:
+            - task_key: run_ci_cd_pipeline
+              notebook_task:
+                notebook_path: ${var.notebook_path}
+                source: GIT
+              job_clusters:
+                - job_cluster_key: job_cluster
+          job_clusters:
+            - job_cluster_key: job_cluster
+              new_cluster:
+                spark_version: "15.4.x-scala2.12"
+                node_type_id: i3.xlarge
+                num_workers: 1
+                data_security_mode: SINGLE_USER
+          schedule:
+            quartz_cron_expression: "0 0 8 * * ?"
+            timezone_id: UTC
+            pause_status: PAUSED
+
+  prd:
+    resources:
+      jobs:
+        ci_cd_pipeline_job:
+          name: genie_ci_cd_pipeline_prd
+          description: "CI/CD pipeline job for data integration (production environment)"
+          tasks:
+            - task_key: run_ci_cd_pipeline
+              notebook_task:
+                notebook_path: ${var.notebook_path}
+                source: GIT
+              job_clusters:
+                - job_cluster_key: job_cluster
+          job_clusters:
+            - job_cluster_key: job_cluster
+              new_cluster:
+                spark_version: "15.4.x-scala2.12"
+                node_type_id: i3.xlarge
+                num_workers: 1
+                data_security_mode: SINGLE_USER
+          schedule:
+            quartz_cron_expression: "0 0 8 * * ?"
+            timezone_id: UTC
+            pause_status: UNPAUSED
