@@ -1,0 +1,32 @@
+# Declarative Automation Bundle (DAB) for genie_data_ci-cd
+# CI/CD pipeline with dev and prd targets
+bundle:
+  name: genie_data_ci_cd
+
+include:
+  - resources/*.yml
+
+variables:
+  notebook_path:
+    description: Path to the CI/CD notebook source
+    default: ../src/ci_cd_pipeline
+
+targets:
+  dev:
+    mode: development
+    default: true
+    run_as:
+      user_name: venkateshvasu07@gmail.com
+    workspace:
+      root_path: /Workspace/Data integration CI-CD/.bundle/${bundle.name}/dev
+    variables:
+      notebook_path: ../src/ci_cd_pipeline
+
+  prd:
+    mode: production
+    run_as:
+      user_name: venkateshvasu07@gmail.com
+    workspace:
+      root_path: /Workspace/Data integration CI-CD/.bundle/${bundle.name}/prd
+    variables:
+      notebook_path: ../src/ci_cd_pipeline
